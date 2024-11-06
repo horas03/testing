@@ -77,29 +77,31 @@ public class CryptoService {
                             .build());
     }
 
-    public CryptoDto getCryptoWithHighestNormalizedRange(LocalDate specificDate) {
+    public CryptoRange getCryptoWithHighestNormalizedRange(LocalDate specificDate) {
         List<Crypto> cryptoList = LettuceLists.newList(cryptoRepository.findAll()).stream()
                 .filter(c -> c.getFormattedTimestamp().toLocalDate().isEqual(specificDate))
                 .toList();
+
+        if (cryptoList.isEmpty()) {
+            throw new BusinessException("No crypto data found for the specified date: " + specificDate);
+        }
 
         return cryptoList.stream()
                 .collect(Collectors.groupingBy(Crypto::getSymbol))
                 .entrySet().stream()
                 .map(entry -> {
-                    Map<String, Double> minMax = getMinAndMax(entry.getValue());
-                    double min = minMax.get("min");
-                    double max = minMax.get("max");
+                    String symbol = entry.getKey();
+                    List<Crypto> entries = entry.getValue();
+                    double min = entries.stream().mapToDouble(Crypto::getPrice).min().orElse(Double.NaN);
+                    double max = entries.stream().mapToDouble(Crypto::getPrice).max().orElse(Double.NaN);
                     double normalizedRange = (max - min) / min;
-                    return new CryptoRange(entry.getKey(), normalizedRange);
+                    return new CryptoRange(symbol, normalizedRange);
                 })
                 .max(Comparator.comparingDouble(CryptoRange::getRange))
-                .map(cryptoRange -> cryptoList.stream()
-                        .filter(c -> c.getSymbol().equals(cryptoRange.getSymbol()))
-                        .findFirst()
-                        .map(cryptoMapper::toDto)
-                        .orElseThrow(() -> new RuntimeException("Crypto not found")))
-                .orElseThrow(() -> new RuntimeException("No crypto found with the highest normalized range for the given date"));
+                .orElseThrow(() -> new BusinessException("No crypto data found with a calculated normalized range for the specified date: " + specificDate));
     }
+
+
 
     private List<Crypto> filterByTimeframe(List<Crypto> cryptos, String timeframe) {
         LocalDateTime now = LocalDateTime.now();
