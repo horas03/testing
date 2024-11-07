@@ -23,7 +23,7 @@ public class CryptoController {
 
     @RateLimited(name = "customRateLimiter")
     @GetMapping("/sorted-by-normalized-range")
-    public List<CryptoDto> getCryptosSortedByNormalizedRange(@RequestParam Timeframe timeframe) {
+    public List<CryptoRange> getCryptosSortedByNormalizedRange(@RequestParam Timeframe timeframe) {
         return cryptoService.getAllCryptosSortedByNormalizedRange(timeframe);
     }
 

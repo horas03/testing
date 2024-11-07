@@ -65,12 +65,8 @@ class CryptoServiceTest {
     @Test
     void getAllCryptosSortedByNormalizedRange_ShouldReturnSortedCryptoDtos() {
         when(cryptoRepository.findAll()).thenReturn(cryptoList);
-        when(cryptoMapper.toDto(any(Crypto.class))).thenAnswer(invocation -> {
-            Crypto crypto = invocation.getArgument(0);
-            return CryptoDto.builder().symbol(crypto.getSymbol()).price(crypto.getPrice()).build();
-        });
 
-        List<CryptoDto> result = cryptoService.getAllCryptosSortedByNormalizedRange(Timeframe.FIVE_YEARS);
+        List<CryptoRange> result = cryptoService.getAllCryptosSortedByNormalizedRange(Timeframe.FIVE_YEARS);
 
         assertFalse(result.isEmpty());
         verify(cryptoRepository, times(1)).findAll();

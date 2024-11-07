@@ -27,7 +27,7 @@ public class CryptoService {
     private final CryptoMapper cryptoMapper;
     private final StartupComponent startupComponent;
 
-    public List<CryptoDto> getAllCryptosSortedByNormalizedRange(Timeframe timeframe) {
+    public List<CryptoRange> getAllCryptosSortedByNormalizedRange(Timeframe timeframe) {
         List<Crypto> cryptoList = filterByTimeframe(LettuceLists.newList(cryptoRepository.findAll()), timeframe.getLabel());
 
         return cryptoList.stream()
@@ -41,12 +41,6 @@ public class CryptoService {
                     return new CryptoRange(entry.getKey(), normalizedRange);
                 })
                 .sorted(Comparator.comparingDouble(CryptoRange::getRange).reversed())
-                .map(cryptoRange -> cryptoList.stream()
-                        .filter(c -> c.getSymbol().equals(cryptoRange.getSymbol()))
-                        .findFirst()
-                        .map(cryptoMapper::toDto)
-                        .orElse(null))
-                .filter(Objects::nonNull)
                 .toList();
     }
 
