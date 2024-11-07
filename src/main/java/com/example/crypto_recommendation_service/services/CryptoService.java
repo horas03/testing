@@ -1,14 +1,11 @@
 package com.example.crypto_recommendation_service.services;
 
-import com.example.crypto_recommendation_service.config.StartupComponent;
-import com.example.crypto_recommendation_service.domain.model.CryptoDto;
 import com.example.crypto_recommendation_service.domain.model.CryptoRange;
 import com.example.crypto_recommendation_service.domain.model.MetricsDto;
 import com.example.crypto_recommendation_service.domain.model.MetricsDataDto;
 import com.example.crypto_recommendation_service.entities.Crypto;
 import com.example.crypto_recommendation_service.entities.Timeframe;
 import com.example.crypto_recommendation_service.exceptions.BusinessException;
-import com.example.crypto_recommendation_service.mappers.CryptoMapper;
 import com.example.crypto_recommendation_service.repositories.CryptoRepository;
 import io.lettuce.core.internal.LettuceLists;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +21,6 @@ import java.util.stream.Collectors;
 public class CryptoService {
 
     private final CryptoRepository cryptoRepository;
-    private final CryptoMapper cryptoMapper;
-    private final StartupComponent startupComponent;
 
     public List<CryptoRange> getAllCryptosSortedByNormalizedRange(Timeframe timeframe) {
         List<Crypto> cryptoList = filterByTimeframe(LettuceLists.newList(cryptoRepository.findAll()), timeframe.getLabel());
