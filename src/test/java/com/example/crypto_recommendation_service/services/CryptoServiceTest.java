@@ -1,13 +1,11 @@
 package com.example.crypto_recommendation_service.services;
 
-import com.example.crypto_recommendation_service.domain.model.CryptoDto;
 import com.example.crypto_recommendation_service.domain.model.CryptoRange;
 import com.example.crypto_recommendation_service.domain.model.MetricsDto;
 import com.example.crypto_recommendation_service.domain.model.MetricsDataDto;
 import com.example.crypto_recommendation_service.entities.Crypto;
 import com.example.crypto_recommendation_service.entities.Timeframe;
 import com.example.crypto_recommendation_service.exceptions.BusinessException;
-import com.example.crypto_recommendation_service.mappers.CryptoMapper;
 import com.example.crypto_recommendation_service.repositories.CryptoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,9 +29,6 @@ class CryptoServiceTest {
 
     @Mock
     private CryptoRepository cryptoRepository;
-
-    @Mock
-    private CryptoMapper cryptoMapper;
 
     @InjectMocks
     private CryptoService cryptoService;
