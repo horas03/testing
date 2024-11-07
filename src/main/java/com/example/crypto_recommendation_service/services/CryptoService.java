@@ -28,13 +28,7 @@ public class CryptoService {
         return cryptoList.stream()
                 .collect(Collectors.groupingBy(Crypto::getSymbol))
                 .entrySet().stream()
-                .map(entry -> {
-                    Map<String, Double> minMax = getMinAndMax(entry.getValue());
-                    double min = minMax.get("min");
-                    double max = minMax.get("max");
-                    double normalizedRange = (max - min) / min;
-                    return new CryptoRange(entry.getKey(), normalizedRange);
-                })
+                .map(entry -> new CryptoRange(entry.getKey(), getNormalizedRange(entry.getValue())))
                 .sorted(Comparator.comparingDouble(CryptoRange::getRange).reversed())
                 .toList();
     }
@@ -78,14 +72,7 @@ public class CryptoService {
         return cryptoList.stream()
                 .collect(Collectors.groupingBy(Crypto::getSymbol))
                 .entrySet().stream()
-                .map(entry -> {
-                    String symbol = entry.getKey();
-                    List<Crypto> entries = entry.getValue();
-                    double min = entries.stream().mapToDouble(Crypto::getPrice).min().orElse(Double.NaN);
-                    double max = entries.stream().mapToDouble(Crypto::getPrice).max().orElse(Double.NaN);
-                    double normalizedRange = (max - min) / min;
-                    return new CryptoRange(symbol, normalizedRange);
-                })
+                .map(entry -> new CryptoRange(entry.getKey(), getNormalizedRange(entry.getValue())))
                 .max(Comparator.comparingDouble(CryptoRange::getRange))
                 .orElseThrow(() -> new BusinessException("No crypto data found with a calculated normalized range for the specified date: " + specificDate));
     }
@@ -114,6 +101,10 @@ public class CryptoService {
                 "min", cryptos.stream().mapToDouble(Crypto::getPrice).min().orElse(Double.NaN),
                 "max", cryptos.stream().mapToDouble(Crypto::getPrice).max().orElse(Double.NaN)
         );
+    }
+
+    private double getNormalizedRange(List<Crypto> cryptos) {
+        return (getMinAndMax(cryptos).get("max") - getMinAndMax(cryptos).get("min")) / getMinAndMax(cryptos).get("min");
     }
 
 }

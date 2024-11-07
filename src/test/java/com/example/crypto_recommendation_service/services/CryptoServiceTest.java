@@ -123,5 +123,17 @@ class CryptoServiceTest {
         assertEquals(expectedMin, minMax.get("min"));
         assertEquals(expectedMax, minMax.get("max"));
     }
+
+    @Test
+    void testGetNormalizedRange() throws Exception {
+        Method method = CryptoService.class.getDeclaredMethod("getNormalizedRange", List.class);
+        method.setAccessible(true);
+
+        double expectedMin = cryptoList.stream().mapToDouble(Crypto::getPrice).min().orElse(Double.NaN);
+        double expectedMax = cryptoList.stream().mapToDouble(Crypto::getPrice).max().orElse(Double.NaN);
+
+        assertEquals((expectedMax - expectedMin) / expectedMin, method.invoke(cryptoService, cryptoList));
+    }
+
 }
 
