@@ -77,8 +77,6 @@ public class CryptoService {
                 .orElseThrow(() -> new BusinessException("No crypto data found with a calculated normalized range for the specified date: " + specificDate));
     }
 
-
-
     private List<Crypto> filterByTimeframe(List<Crypto> cryptos, String timeframe) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime start = switch (timeframe.toLowerCase()) {
@@ -104,7 +102,8 @@ public class CryptoService {
     }
 
     private double getNormalizedRange(List<Crypto> cryptos) {
-        return (getMinAndMax(cryptos).get("max") - getMinAndMax(cryptos).get("min")) / getMinAndMax(cryptos).get("min");
+        Map<String, Double> minMax = getMinAndMax(cryptos);
+        return (minMax.get("max") - minMax.get("min")) / minMax.get("min");
     }
 
 }
