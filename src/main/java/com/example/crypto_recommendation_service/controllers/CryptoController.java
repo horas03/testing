@@ -1,7 +1,6 @@
 package com.example.crypto_recommendation_service.controllers;
 
 import com.example.crypto_recommendation_service.aop.RateLimited;
-import com.example.crypto_recommendation_service.domain.model.CryptoDto;
 import com.example.crypto_recommendation_service.domain.model.CryptoRange;
 import com.example.crypto_recommendation_service.domain.model.MetricsDto;
 import com.example.crypto_recommendation_service.entities.Timeframe;

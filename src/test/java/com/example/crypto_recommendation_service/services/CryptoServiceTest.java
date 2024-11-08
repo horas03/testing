@@ -58,7 +58,7 @@ class CryptoServiceTest {
     }
 
     @Test
-    void getAllCryptosSortedByNormalizedRange_ShouldReturnSortedCryptoDtos() {
+    void getAllCryptosSortedByNormalizedRange_ShouldReturnSortedCryptoRanges() {
         when(cryptoRepository.findAll()).thenReturn(cryptoList);
 
         List<CryptoRange> result = cryptoService.getAllCryptosSortedByNormalizedRange(Timeframe.FIVE_YEARS);
