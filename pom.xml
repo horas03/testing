@@ -43,13 +43,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct-processor</artifactId>
-			<version>1.6.2</version>
-			<scope>provided</scope>
-		</dependency>
-
 		<!-- Spring Boot Starter Test (optional for testing) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
